@@ -1,0 +1,22 @@
+CREATE TABLE motorcycles (id INTEGER PRIMARY KEY, make TEXT, model TEXT, eng_size INTEGER, horsies INTEGER, color TEXT, price INTEGER);
+INSERT INTO motorcycles VALUES (1, "Triumph", "Street Triple", 765, 110, "silver", 15);
+INSERT INTO motorcycles VALUES (2, "Suzuki", "SV650", 650, 75, "black", 2);
+INSERT INTO motorcycles VALUES (3, "Yamaha", "MT-10", 1000, 140, "blue", 13);
+INSERT INTO motorcycles VALUES (4, "Yamaha", "MT-09", 900, 110, "black", 11);
+INSERT INTO motorcycles VALUES (5, "Yamaha", "MT-07", 700, 75, "white", 7);
+INSERT INTO motorcycles VALUES (6, "Aprilia", "RS660", 660, 72, "red", 13);
+INSERT INTO motorcycles VALUES (7, "Aprilia", "RSV4", 1000, 180, "red", 26);
+INSERT INTO motorcycles VALUES (8, "Triumph", "Bonneville", 560, 68, "green", 13);
+INSERT INTO motorcycles VALUES (9, "Suzuki", "GSX-R", 1000, 135, "white", 6);
+INSERT INTO motorcycles VALUES (10, "Ducati", "V4S", 1000, 178, "red", 25);
+INSERT INTO motorcycles VALUES (11, "Honda", "Grom", 150, 10, "yellow", 5);
+INSERT INTO motorcycles VALUES (12, "Yamaha", "R1", 1000, 160, "blue", 17);
+insert into motorcycles values (13, "Honda", "Interceptor", 782, 105, "red", 12);
+insert into motorcycles values (14, "Yamaha", "TW-200", 200, 16, "white", 9);
+insert into motorcycles values (15, "MV Augusta", "Superveloce 800", 800, 147, "red", 21);
+
+SELECT * FROM motorcycles;
+
+select * from motorcycles ORDER BY "price";
+
+select make, MAX(horsies) from motorcycles group by make;
