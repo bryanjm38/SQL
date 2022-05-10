@@ -1,0 +1,109 @@
+/* Create table about the people and what they do here */
+create table people (
+    id integer primary key autoincrement,
+    name text,
+    job text
+);
+
+insert into people (name, job)
+    values ("Tom Hanks", "actor");
+insert into people (name, job)
+    values ("Billie Eilish", "singer");
+insert into people (name, job)
+    values ("Dean Koontz", "author");
+insert into people (name, job)
+    values ("Hailee Steinfeld", "actor");
+insert into people (name, job)
+    values ("Pete Holmes", "actor");
+insert into people (name, job)
+    values ("Natalie Portman", "actor");
+insert into people (name, job)
+    values ("Ricky Gervais", "actor");
+insert into people (name, job)
+    values ("Liv Tyler", "actor");
+insert into people (name, job)
+    values ("Richard Dawkins", "author");
+
+create table fame (
+    id integer primary key autoincrement,
+    fame_id integer,
+    net_worth integer,
+    list text,
+    multi text);
+    
+insert into fame (fame_id, net_worth, list, multi)
+    values (1, 400000000, "A", "no");
+insert into fame (fame_id, net_worth, list, multi)
+    values (2, 30000000, "X", "no");
+insert into fame (fame_id, net_worth, list, multi)
+    values (3, 200000000, "X", "no");
+insert into fame (fame_id, net_worth, list, multi)
+    values (4, 10000000, "C", "yes");
+insert into fame (fame_id, net_worth, list, multi)
+    values (5, 3000000, "C", "yes");
+insert into fame (fame_id, net_worth, list, multi)
+    values (6, 90000000, "A", "no");
+insert into fame (fame_id, net_worth, list, multi)
+    values (7, 140000000, "B", "yes");
+insert into fame (fame_id, net_worth, list, multi)
+    values (8, 50000000, "B", "yes");
+insert into fame (fame_id, net_worth, list, multi)
+    values (9, 10000000, "X", "no");
+    
+create table life (
+    id integer primary key autoincrement,
+    life_id integer,
+    generation text,
+    married text,
+    parent text);
+
+insert into life (life_id, generation, married, parent)
+    values (1, "boomer", "married", "parent");
+insert into life (life_id, generation, married, parent)
+    values (2, "Gen Z", "single", "non-parent");
+insert into life (life_id, generation, married, parent)
+    values (3, "boomer", "married", "non-parent");
+insert into life (life_id, generation, married, parent)
+    values (4, "Gen Z", "single", "non-parent");
+insert into life (life_id, generation, married, parent)
+    values (5, "millenial", "married", "parent");
+insert into life (life_id, generation, married, parent)
+    values (6, "millenial", "married", "parent");
+insert into life (life_id, generation, married, parent)
+    values (7, "boomer", "married", "non-parent");
+insert into life (life_id, generation, married, parent)
+    values (8, "millenial", "single", "parent");
+insert into life (life_id, generation, married, parent)
+    values (9, "silent", "married", "parent");
+
+
+
+select net_worth from fame
+    order by net_worth DESC;
+    
+select name from people
+    join fame
+    on fame.fame_id = people.id
+    where net_worth < 90000000
+    and multi = "no";
+
+select name from people
+    join life
+    on life.life_id = people.id
+    join fame
+    on fame.fame_id = people.id
+    where fame.multi = "yes"
+    and life.generation = "Gen Z";
+
+select people.name, fame.net_worth from fame
+    join people
+    on fame.fame_id = people.id
+    order by net_worth ASC;
+
+select name from people
+    join life
+    on life.life_id = people.id
+    join fame
+    on fame.fame_id = people.id
+    where life.parent = "parent"
+    and fame.list = "A";
