@@ -1,0 +1,45 @@
+/* answers to SQL questions from 1.5 "SQL Dialects"
+
+/* #1 How many movie titles are there in the database? (not TV)
+  select count(*)
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+  where type = 'Movie';
+
+/* #2 When was the most recent batch of movies'TV shows added to the database?
+  select max(date("CharlotteChaze/BreakIntoTech"."netflix_titles_info"/"date_added"))
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info";
+
+/* #3 List all the movies and TV shows in alphabetical order
+  select title
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+  order by "CharlotteChaze/BreakIntoTech"."netflix_titles_info"."title";
+
+/* #4 Who was the director for the movie Bright Star?
+  select "CharlotteChaze/BreakIntoTech"."netflix_people"."director"
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+  join "CharlotteChaze/BreakIntoTech"."netflix_titles_people"
+  on "CharlotteChaze/BreakIntoTech"."netflix_titles_info"."show_id" = "CharlotteChaze/BreakIntoTech"."netflix_people"."show_id"
+  where "CharlotteChaze/BreakIntoTech"."netflix_titles_info"."title" = 'Bright Star';
+/* cleaner version:
+  select director
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+  left join "CharlotteChaze/BreakIntoTech"."netflix_people" people
+  on titles.show_id = people.show_id
+  where titles.title = 'Bright Star';
+
+/* #5 What is the oldest movie in the database, and what year was it released?
+  select "CharlotteChaze/BreakIntoTech"."netflix_titles_info"."title", "CharlotteChaze/BreakIntoTech"."netflix_titles_info"."release_year"
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+  order by "CharlotteChaze/BreakIntoTech"."netflix_titles_info"/"release_year" asc limit 1;
+/* cleaner version:
+  SELECT title, release_year
+  FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+  order by release_year asc limit 1;
+/* Charlotte's version (which pulls a 1942 result, instead of 1925):
+  select title, release_year
+  from "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+  where type = 'Movie'
+  group by title, release_year
+  order by release_year asc
+  limit 1;
+
