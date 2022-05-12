@@ -1,41 +1,48 @@
-    /* #1 How many orders were placed in January?
+#1 How many orders were placed in January?
     select count(orderID)
     from BIT_DB.JanSales;
     /* 9723
     
-    /* #2 How many of those orders were for an iPhone?
+#2 How many of those orders were for an iPhone?
     select count(orderID)
     from BIT_DB.JanSales
     where product = 'iPhone';
     /* 379
     
-    /* #3 Select the customer account numbers for all the orders that were placed in February.
+#3 Select the customer account numbers for all the orders that were placed in February.
     select acctnum
     from FebSales
     left join customers
     on FebSales.orderID = customers.order_id;    
     
-    /* #4 Which product was the cheapest one sold in January, and what was the price? For this one, you are going to use the commands distinct and MIN(). Using 'SELECT distinct' will remove duplicate rows from your results. The MIN() command will allow you to select the smallest value from the price column. This is a hard one - see if you can do it, but don't be afraid to look at the hint or answer if you need to!
+#4 Which product was the cheapest one sold in January, and what was the price? For this one, you are going to use the commands distinct and MIN(). Using 'SELECT distinct' will remove duplicate rows from your results. The MIN() command will allow you to select the smallest value from the price column. This is a hard one - see if you can do it, but don't be afraid to look at the hint or answer if you need to!
     select distinct(product), min(price)
     from JanSales
     group by product
     order by price asc limit 1;
     
-    /* #5 What is the total revenue for each product sold in January? (Revenue can be calculated using the number of products sold and the price of the products).
+#5 What is the total revenue for each product sold in January? (Revenue can be calculated using the number of products sold and the price of the products).
     select sum(quantity * price) as revenue, product
     from JanSales
     group by product;
     
-    /* #6 Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+#6 Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
     select product, sum(quantity), sum(price)
     from FebSales
     where location = "548 Lincoln St, Seattle, WA 98101"
     group by product;
     
-    /* #7 How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? 
+#7 How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? 
     select count (acctnum), avg(quantity*price)
     from FebSales
     left join customers
     on FebSales.orderID = customers.order_id
     where quantity > 2;
     
+
+Question from 1.8:
+List all the products sold in Los Angeles in February, and include how many of each were sold.
+    select product, sum(quantity)
+    from FebSales
+    where location like '%Los Angeles%'
+    group by product;
