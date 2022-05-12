@@ -22,7 +22,7 @@
     order by price asc limit 1;
     
 #5 What is the total revenue for each product sold in January? (Revenue can be calculated using the number of products sold and the price of the products).
-    select sum(quantity * price) as revenue, product
+    select sum(quantity) * price as revenue, product
     from JanSales
     group by product;
     
@@ -33,7 +33,7 @@
     group by product;
     
 #7 How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? 
-    select count (acctnum), avg(quantity*price)
+    select count (acctnum), avg(quantity)*price
     from FebSales
     left join customers
     on FebSales.orderID = customers.order_id
