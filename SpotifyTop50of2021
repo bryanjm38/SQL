@@ -1,0 +1,52 @@
+MIN, MAX, and AVG "danceability" ratings
+  select avg(danceability), min(danceability), max(danceability)
+  from Spotifydata;
+0.38; 0.903; 0.68572
+
+Highest instrumental score
+  select artist_name, track_name, max(instrumentalness)
+  from Spotifydata;
+0.0000954
+
+Lowest popularity score in the Top 50
+  select min(popularity)
+  from Spotifydata;
+67
+
+Top 5 artists with multiple songs in the Top 50
+  select artist_name, 
+  count(track_name) as tracks
+  from Spotifydata
+  group by artist_name
+  order by tracks desc limit 5;
+Olivia Rodrigo	4
+Doja Cat	4
+Bad Bunny	3
+The Weeknd	2
+The Kid LAROI	2
+
+Top 5 exciting songs
+  select artist_name, track_name, (danceability + energy + valence) as excitement
+  from Spotifydata
+  order by excitement desc limit 5;
+artist_name   track_name                                        excitement
+Joel Corry	  Head & Heart (feat. MNEK)	                          2.513
+Riton	        Friday (feat. Mufasa & Hypeman) - Dopamine Re-Edit	2.487
+Doja Cat	    Woman	                                              2.469
+J Balvin	    Qué Más Pues?	                                      2.452
+Dua Lipa	    Levitating (feat. DaBaby)	                          2.442
+
+Song with the most to say
+  select artist_name, track_name, (speechiness * tempo * duration_ms) as lyrical_length
+  from Spotifydata
+  order by lyrical_length desc limit 5;
+Lil Nas X's "MONTERO (Call Me By Your Name)" by a long shot with a score of 5416148.94128
+
+Three songs from the Top 50 that are slowest and softest
+  select artist_name, track_name, (loudness * acousticness * valence * tempo) as softNslow
+  from Spotifydata
+  order by softNslow desc limit 3;
+artist_name   track_name              soft&slow
+The Weeknd	  Blinding Lights	        -0.4948296032388
+Måneskin	    I WANNA BE YOUR SLAVE	  -0.8394908901192
+BTS	          Butter	                -1.28080913238915
