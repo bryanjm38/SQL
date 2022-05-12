@@ -1,21 +1,37 @@
-    #1 How many locations are there in New York that sold more than 1 product in January?
-    select count(location)
-from JanSales
-where location like '%New York%'
-and quantity > 1
-order by location;
+#1 How many locations are there in New York that sold more than 1 product in January?
+    select count(distinct location)
+    from JanSales
+    where location like '%New York%'
+    and quantity > 1;
     
-    #2 How many of each type of headphone were sold in February?
+#2 How many of each type of headphone were sold in February?
     select product, sum(quantity)
-from FebSales
-where product like '%headphones%'
-group by product;
+    from FebSales
+    where product like '%headphones%'
+    group by product;
     
-    #3 What was the average amount spent per account in February? (Hint: For this question, we want the average amount spent / number of accounts, not the amount spent by each account).
+#3 What was the average amount spent per account in February? (Hint: For this question, we want the average amount spent / number of accounts, not the amount spent by each account).
+    select sum(quantity)*price / count (acctnum)
+    from FebSales
+    inner join customers
+    on FebSales.orderID = customers.order_id;
+    /*Charlotte used left join. both result in 747.96
     
+#4 What was the average quantity of products purchased per account in February? (Hint: just like question 3, we want the overall average, not the average for each account individually).
+    select avg(quantity)
+    from FebSales
+    inner join customers
+    on FebSales.orderID = customers.order_id
+    order by acctnum; 
+Charlotte's:
+    select sum(quantity)/count(cust.acctnum)
+    FROM BIT_DB.FebSales Feb
+    LEFT JOIN BIT_DB.customers cust
+    ON FEB.orderid=cust.order_id
     
-    #4 What was the average quantity of products purchased per account in February? (Hint: just like question 3, we want the overall average, not the average for each account individually).
-    
-    
-    #5 Which product brought in the most revenue in January and how much revenue did it bring in total?
-    
+#5 Which product brought in the most revenue in January and how much revenue did it bring in total?
+    select sum(quantity)*price as revenue, product
+    from JanSales
+    group by product
+    order by revenue desc limit 1;
+
