@@ -1,0 +1,131 @@
+Where to start?
+
+SELECT person_id, transcript
+from interview
+order by person_id;
+
+This turned out to be useless; thousands of lines of a book (Through the Looking Glass?) So, trying again.
+
+SELECT *
+from crime_scene_report
+where city like '%SQL City%'
+and date = "20180115";
+
+This result is the starting point:
+date	      20180115
+type      	murder
+city  	    SQL City
+description Security footage shows that there were 2 witnesses. The first witness lives at the last house on "Northwestern Dr". 
+            The second witness, named Annabel, lives somewhere on "Franklin Ave".
+
+Finding the names of these witnesses:
+SELECT name, address_number
+  FROM person
+  where address_street_name like '%Northwestern Dr%'
+  order by address_number desc;
+SELECT name, address_number
+  FROM person
+  where address_street_name like '%Franklin Ave%'
+  and name like '%Annabel%';
+These resulted in Morty Schapiro & Annabel Miller
+
+Now I need person_id for these two. (Should have added this to the last query.)
+SELECT id
+  from person
+  where name = "Morty Schapiro";
+SELECT id
+  from person
+  where name = "Annabel Miller";
+Morty is 14887. Annabel is 16371
+
+Maybe now we can pull the interview transcript.
+SELECT person_id, transcript
+  from interview
+  where person_id = 14887; // where person_id = 16371;
+  
+Morty said, "I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on 
+      the bag started with "48Z". Only gold members have those bags. The man got into a car with a plate that included "H42W"."
+Annabel said, "I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th."
+
+So next I'm going to cross-reference these three things:
+  1. has a gym membership number starting with 48Z
+  2. has a license plate including H42W
+  3. checked into the gym on Jan 9, which could have been on Facebook
+
+SELECT *
+  from get_fit_now_member
+  where id like '%48Z%';
+
+SELECT *
+  from drivers_license
+  left join person
+  on person.license_id = drivers_license.id
+  where plate_number like '%H42W%';
+  
+After these two queries, "Jeremy Bowers" is the only name on both lists. So I will check that name for step 3 above.
+
+SELECT membership_id, check_in_date, check_in_time, check_out_time
+  from get_fit_now_check_in
+  where membership_id = "48Z55";
+
+Which yields member 48Z55, Jeremy Bowers, was checked in on Jan 9, 2018, from 1530-1700 hours.
+PS - Jeremy Bowers (person id 67318) does not have any Facebook check-ins on Jan 9, 2018 per this SQL query:
+SELECT person_id, date, event_name
+  from facebook_event_checkin
+  where person_id = "67318";
+  
+So, the eyewitness accounts and circumstantial evidence point to Jeremy Bowers as the murderer.
+
+Running the solution query:
+INSERT INTO solution VALUES (1, 'Jeremy Bowers');
+        
+        SELECT value FROM solution;
+
+Result: "Congrats, you found the murderer!"
+
+--Bonus portion--
+"But wait, there's more... If you think you're up for a challenge, try querying the interview transcript of the murderer to find the 
+real villain behind this crime. If you feel especially confident in your SQL skills, try to complete this final step with no more 
+than 2 queries. Use this same INSERT statement with your new suspect to check your answer."
+
+SELECT transcript
+  from interview
+  where person_id = "67318";
+  
+transcript: "I was hired by a woman with a lot of money. I don't know her name but I know she's around 5'5" (65") or 
+             5'7" (67"). She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony 
+             Concert 3 times in December 2017."
+
+SELECT p.id, p.name, d.height, d.hair_color, d.gender, d.car_make, d.car_model
+  from drivers_license as d
+  left join person p
+  on p.license_id = d.id
+  where car_make = "Tesla"
+  and car_model = "Model S"
+  and hair_color = "red"
+  and height <69
+  and height >63;
+Which gives three results:
+Miranda Priestly, Regina George, & Red Korb
+  
+SELECT fb.person_id, p.name, fb.date, fb.event_name, count(fb.event_name) as trips
+  from facebook_event_checkin as fb
+  inner join person as p
+  on fb.person_id = p.id
+  where event_name = "SQL Symphony Concert"
+  and date like '201712%'
+  group by p.name, fb.event_name
+  having count(event_name) > 2;
+Which gives two results:
+person_id	name	            date	    event_name	          trips
+24556	    Bryan Pardo	      20171224	SQL Symphony Concert	3
+99716	    Miranda Priestly	20171229	SQL Symphony Concert	3
+
+So the new murder suspect is Miranda Priestly.
+
+Running the solution query:
+INSERT INTO solution VALUES (1, 'Miranda Priestly');
+        
+        SELECT value FROM solution;
+
+"Congrats, you found the brains behind the murder! Everyone in SQL City hails you as the greatest SQL detective of all time. Time to break out the champagne!"
