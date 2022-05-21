@@ -1,0 +1,36 @@
+Below is the final project from Charlotte Chaze's course. This one is largely free form - I come up with which queries I'd like to create and answer,
+based on a provided database. That database's file name is chinook. Charlotte laid out the tables, columns, and relations in this image:
+https://cdn.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/https://www.filepicker.io/api/file/sF9aIU7TqOLNWWSSNrOp
+
+On to the SQL!
+
+I've created something like 15-20 queries for this music sales data set. For the ease of the reader, I'm placing up top the queries I find to be most complex.
+Queries like 'count of invoices for x year' will be toward the end.
+
+COMPLEX QUERIES
+
+
+
+
+
+
+LESS COMPLEX QUERIES
+
+How many genres exist in the database?
+    select count(distinct genreid)
+    from tracks;
+    
+What is the length of all available playlists and their names and playlist ID?
+    select p.playlistid, p.name, count(t.trackid) as length
+    from playlist_track t, playlists p
+    where t.playlistid = p.playlistid
+    group by p.name;
+    
+What is the length of each album? (Showing albumid, artist, album, and length)
+    select a.albumid, r.name as artist, a.title as album, count(t.trackid) as length
+    from albums a, artists r, tracks t
+    where t.albumid = a.albumid
+    and a.artistid = r.artistid
+    group by a.albumid
+    order by artist;
+    
