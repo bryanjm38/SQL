@@ -77,5 +77,18 @@ Whhich customers bought the top selling song?
     and track = "The Trooper" 
     order by c.lastname;
 
-What is the top seeling track, and the artist, in the Americas?
+Which customers and countries bought the top 5 songs sold?
+    
 
+What is the top selling track, artist, & country, outside the United States?
+    select t.name as track, r.name as artist, count (i.trackid) as sales, v.billingcountry
+    from tracks t, invoice_items i, invoices v, albums a, artists r
+    where t.trackid = i.trackid
+    and i.invoiceid = v.invoiceid
+    and t.albumid = a.albumid
+    and a.artistid = r.artistid
+    and billingcountry != "USA"
+    group by track
+    order by sales desc limit 6;
+    **Six songs all sold four times, so I set the limit to six. Also, the initial single result was a song excitingly called "Untitled" :P
+    
