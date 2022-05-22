@@ -7,9 +7,9 @@ On to the SQL!
 I've created something like 15-20 queries for this music sales data set. For the ease of the reader, I'm placing up top the queries I find to be most complex.
 Queries like 'count of invoices for x year' will be toward the end.
 
-COMPLEX QUERIES
+#COMPLEX QUERIES
 
-Who are the top selling artists in California, USA?
+##Who are the top selling artists in California, USA?
     select r.name as artist, sum(i.quantity) as total, v.billingstate, v.billingcountry
     from invoices v, invoice_items i, tracks t, albums a, artists r
     where v.billingstate = 'CA'
@@ -20,7 +20,7 @@ Who are the top selling artists in California, USA?
     group by r.name
     order by total desc limit 5;
 
-Who are the top selling artists in New York, USA?
+##Who are the top selling artists in New York, USA?
     select r.name as artist, sum(i.quantity) as total, v.billingstate, v.billingcountry
     from invoices v, invoice_items i, tracks t, albums a, artists r
     where v.billingstate = 'NY'
@@ -31,7 +31,7 @@ Who are the top selling artists in New York, USA?
     group by r.name
     order by total desc limit 5;
 
-Who are the top selling artists in France?
+##Who are the top selling artists in France?
     select r.name as artist, sum(i.quantity) as total, v.billingstate, v.billingcountry
     from invoices v, invoice_items i, tracks t, albums a, artists r
     where v.billingcountry = 'France'
@@ -42,7 +42,7 @@ Who are the top selling artists in France?
     group by r.name
     order by total desc limit 5;
 
-How many invoices exist with a track purchased from an artist with "The" in their name?
+##How many invoices exist with a track purchased from an artist with "The" in their name?
 (I realize this specific query would almost never be useful/insightful, but searching for almost any other word could be.)
 Curiously, and understandably, using '%the%', '%the %' and '% the %' yielded different results - 80, 77, and 55 rows, respectively.
     select name, title, albumid
@@ -51,14 +51,32 @@ Curiously, and understandably, using '%the%', '%the %' and '% the %' yielded dif
     and a.artistid = r.artistid
     order by r.name;
 
+##What is the name of the top selling employee by quantity?
+    select e.lastname, e.firstname, sum(i.quantity) as quantity
+    from invoices v, invoice_items i, employees e, customers c
+    where i.invoiceid = v.invoiceid
+    and v.customerid = c.customerid
+    and e.employeeid = c.supportrepid
+    group by e.lastname
+    order by quantity desc;
 
-LESS COMPLEX QUERIES
+##What is the name of the top selling employee by invoice count?
+    select e.lastname, e.firstname, count (v.invoiceid) as count
+    from invoices v, invoice_items i, employees e, customers c
+    where i.invoiceid = v.invoiceid
+    and v.customerid = c.customerid
+    and e.employeeid = c.supportrepid
+    group by e.lastname
+    order by quantity desc;
 
-How many GENRES exist in the database?
+
+#LESS COMPLEX QUERIES
+
+##How many GENRES exist in the database?
     select count(distinct genreid)
     from tracks;
 
-What is the top-selling GENRE?
+##What is the top-selling GENRE?
     select g.name, count(i.quantity) as TracksSold
     from genres g, tracks t, invoice_items i
     where g.genreid = t.genreid
@@ -66,7 +84,7 @@ What is the top-selling GENRE?
     group by g.name
     order by TracksSold desc limit 1;
     
-What is the least-selling GENRE?
+##What is the least-selling GENRE?
     select g.name, count(i.quantity) as TracksSold
     from genres g, tracks t, invoice_items i
     where g.genreid = t.genreid
@@ -74,13 +92,13 @@ What is the least-selling GENRE?
     group by g.name
     order by TracksSold asc limit 1;
     
-What is the length of all available PLAYLISTS and their names and playlist ID?
+##What is the length of all available PLAYLISTS and their names and playlist ID?
     select p.playlistid, p.name, count(t.trackid) as length
     from playlist_track t, playlists p
     where t.playlistid = p.playlistid
     group by p.name;
     
-What is the length of each ALBUM? (Showing albumid, artist, album, and length)
+##What is the length of each ALBUM? (Showing albumid, artist, album, and length)
     select a.albumid, r.name as artist, a.title as album, count(t.trackid) as length
     from albums a, artists r, tracks t
     where t.albumid = a.albumid
@@ -88,25 +106,25 @@ What is the length of each ALBUM? (Showing albumid, artist, album, and length)
     group by a.albumid
     order by artist;
     
-How many COUNTRIES have purchased tracks?
+##How many COUNTRIES have purchased tracks?
     select count (distinct billingcountry)
     from invoices;
 
-What are the top five COUNTRIES by sales?
+##What are the top five COUNTRIES by sales?
     select v.billingcountry, sum(i.quantity) as total
     from invoices v, invoice_items i
     where v.invoiceid = i.invoiceid
     group by  v.billingcountry
     order by total desc limit 5;
 
-What are the top 5 songs SOLD?
+##What are the top 5 songs SOLD?
     select t.name as track, count (i.trackid) as sales
     from tracks t, invoice_items i
     where t.trackid = i.trackid
     group by track
     order by sales desc limit 5;
 
-Whhich customers bought the top SELLING song?
+##Which customers bought the top SELLING song?
     select t.name as track, i.quantity, c.customerid, c.firstname, c.lastname, c.company
     from tracks t, invoice_items i, invoices v, customers c
     where t.trackid = i.trackid
@@ -115,10 +133,10 @@ Whhich customers bought the top SELLING song?
     and track = "The Trooper" 
     order by c.lastname;
 
-Which customers and countries bought the top 5 songs SOLD?
+##Which customers and countries bought the top 5 songs SOLD?
     
 
-What is the top SELLING track, artist, & country, outside the United States?
+##What is the top SELLING track, artist, & country, outside the United States?
     select t.name as track, r.name as artist, count (i.trackid) as sales, v.billingcountry
     from tracks t, invoice_items i, invoices v, albums a, artists r
     where t.trackid = i.trackid
