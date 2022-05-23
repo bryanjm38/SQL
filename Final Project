@@ -4,8 +4,9 @@ https://cdn.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/https://www.filepicker.io
 
 On to the SQL!
 
-I've created something like 15-20 queries for this music sales data set. For the ease of the reader, I'm placing up top the queries I find to be most complex.
-Queries like 'count of invoices for x year' will be toward the end.
+I've created something like 15-20 queries for this music sales data set. For the ease of the reader, I'm placing the queries I find to be most 
+complex at the top. Simpler queries, like 'count of invoices for x year', will be toward the end.
+
 
 COMPLEX QUERIES
 
@@ -77,6 +78,24 @@ What is the name of the top selling employee by invoice count?
     and e.employeeid = c.supportrepid
     group by e.lastname
     order by quantity desc;
+    
+Which customers and countries bought the top-sold song?
+    select t.name as track, c.lastname, c.firstname, c.company, c.country, v.total
+    from tracks t, invoice_items i, invoices v, customers c
+    where t.trackid = i.trackid
+    and i.invoiceid = v.invoiceid
+    and v.customerid = c.customerid
+    and track = 'The Trooper'
+    order by v.total desc;
+
+Which tracks (by ID) have not sold?
+    select trackid
+    from tracks
+    except
+    select trackid
+    from invoice_items;
+    [1,519 results]
+
 
 
 LESS COMPLEX QUERIES
@@ -125,6 +144,18 @@ What are the top five countries by sales?
     where v.invoiceid = i.invoiceid
     group by  v.billingcountry
     order by total desc limit 5;
+    
+List all of the invoice data for sales to France.
+    select * 
+    from invoices
+    where billingcountry = "France"
+    order by billingaddress;
+
+Show total sales revenue per country.
+    select billingcountry, round(sum(total)) as total
+    from invoices
+    group by billingcountry
+    order by billingcountry;
 
 What are the top 5 songs sold?
     select t.name as track, count (i.trackid) as sales
@@ -133,8 +164,11 @@ What are the top 5 songs sold?
     group by track
     order by sales desc limit 5;
 
-Which customers and countries bought the top 5 songs sold?
-    
+What is the revenue and invoice count for 2009?
+    select count(invoiceid) as "2009 invoices", sum(total) as total
+    from invoices
+    where invoicedate like '2009%'
+    order by invoicedate;
 
 What is the top selling track, artist, & country, outside the United States?
     select t.name as track, r.name as artist, count (i.trackid) as sales, v.billingcountry
