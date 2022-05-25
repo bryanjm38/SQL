@@ -170,6 +170,12 @@ What is the revenue and invoice count for 2009?
     where invoicedate like '2009%'
     order by invoicedate;
 
+What are the revenue totals by year?
+    select strftime('%Y', invoicedate) as year, sum(total) as total
+    from invoices
+    group by year
+    order by year;
+
 What is the top selling track, artist, & country, outside the United States?
     select t.name as track, r.name as artist, count (i.trackid) as sales, v.billingcountry
     from tracks t, invoice_items i, invoices v, albums a, artists r
