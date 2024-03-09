@@ -1,0 +1,19 @@
+Write your own SQL query that uses a SELECT statement to order the items by price.
+select item_name, price
+from superstore
+order by price;
+
+Write your own SQL query that will show a statistic about the item prices, like a sum, average, minimum, maximum, or count. Remember to add a semi-colon to the end of each of your queries to tell the database where each query ends.
+select min(price)
+from superstore;
+
+Write your own SQL query that will show a statistic about the price for items in the category of "Kitchen Supplies". The values in the categories column are called text strings, and text strings are case sensitive. That means if you want to select "Kitchen Supplies", you will need to type it exactly as it appears in the data, ie with a capital "K" and a capital "S".
+select max(price)
+from superstore
+where category='Kitchen Supplies';
+
+Come up with your own question about the data and try to answer it using SQL. For example: How many air purifiers are in stock? It's okay if you can't figure out how to answer your question, the idea here is to practice thinking about what kinds of insights you can get from a dataset from asking questions about it.
+What is the total cost of buying two of every furnishing?
+select sum(price)*2
+from superstore
+where category='Furnishings';
