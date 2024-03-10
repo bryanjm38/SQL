@@ -1,0 +1,20 @@
+-- For your first query, write SQL that will select the product names of all the Internet products types.
+select product_name
+from products
+where product_type='Internet';
+
+-- Write a query that will select the customer IDs for all the customers who are subscribed to High-Speed Internet (product_id =1).
+select customer_id
+from customer_subscriptions
+where product_id=1;
+
+-- Write a query that will select the email addresses of all the customers who are subscribed to products with the "Internet" product type. 
+select email
+from customer_subscriptions
+where product_id=1
+or product_id=4;
+-- or
+select email
+from customer_subscriptions
+where product_id in (select product_id from products where product_type='Internet');
+--seems to me that for  "where X ... select Y ...", X must equal Y, but I'm not seeing that stated anywhere
