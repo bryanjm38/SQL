@@ -1,0 +1,18 @@
+Select all the bank product names so we know what our options are.
+select product_name
+from bank_products;
+
+This customer is interested in opening a Checking or Savings account, but wants more information on the options. Write another query that uses OR to show the product names that have a Checking OR Savings product type.
+select product_name
+from bank_products
+where product_type='Savings'
+or product_type='Checking';
+
+The customer decided they want a savings account with a good interest rate and no monthly fee.
+Write another query that uses AND to show the product names that have a "Savings" product type AND have an interest_rate of at least 0.75, AND have no monthly fee. Include the product name and interest rate in your SELECT statement. 
+select product_name, interest_rate
+from bank_products
+where product_type='Savings'
+and interest_rate>=0.75
+and monthly_fee=0;
+
