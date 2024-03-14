@@ -1,0 +1,38 @@
+-- Select all the customer IDs, customer names, and customer emails, as well as the shipping methods each customer used. Your results should be in order by customer ID. 
+select
+customers.customer_id,
+customers.customer_name,
+customers.contact_email,
+shipments.shipping_method
+from customers
+left join shipments
+on customers.customer_id = shipments.sender_id
+order by customers.customer_id
+;
+
+-- Select all the customer IDs, customer names, customer emails, and shipping methods from the database, but only for the customers we have detailed shipping history for (ie, customers for whom we have information in the shipments table). Your results should be in order by customer ID. 
+select
+customers.customer_id,
+customers.customer_name,
+customers.contact_email,
+shipments.shipping_method
+from customers
+inner join shipments
+on customers.customer_id = shipments.sender_id
+order by customers.customer_id
+;
+
+-- Select all the customer IDs, customer names, customer emails, and shipping methods from the database, but only for the customers we have detailed shipping history for (ie, customers for whom we have information in the shipments table), and who have only used the 'Standard' shipping method before. Your results should be in order by customer ID.
+select
+customers.customer_id,
+customers.customer_name,
+customers.contact_email,
+shipments.shipping_method
+from customers
+inner join shipments
+on customers.customer_id = shipments.sender_id
+where shipments.shipping_method='Standard'
+order by customers.customer_id
+;
+
+-- 
