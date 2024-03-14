@@ -1,0 +1,18 @@
+-- Select every participant name and the percent of the marathon that they completed.
+select participant_name, completion_fraction*100 as completion_percentage
+from marathon;
+
+-- Now use ROUND in your query to answer this question:
+-- Select every participant name and the percent of the marathon that they completed. Show the percent of the marathon completed rounded to one decimal place.
+select participant_name, round(completion_fraction*100,1) as completion_percentage
+from marathon;
+
+-- For this query, show how many employees completed each quarter of the marathon (75% or more, 50%, 25%, or under 25%).
+select count(*),
+case when completion_fraction >=0.76 then "76%+"
+when completion_fraction >0.5 then "51-75%"
+when completion_fraction >0.25 then "26-50%"
+else "0-25%"
+end as quarter_completed
+from marathon
+group by quarter_completed;
