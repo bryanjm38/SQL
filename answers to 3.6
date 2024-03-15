@@ -1,0 +1,37 @@
+-- You've been asked by your boss to determine which books by which authors are currently being used in the company's Psychology and Economics curricula. You've already done this for psychology, so economics is next.
+
+-- We're going to work on finding this answer in 3 parts:
+
+-- 1. Find the names of the economics courses that are currently being taught.
+-- 2. Find the titles of the textbooks currently used in the economics courses.
+-- 3. Find the names of the authors who wrote the textbooks.
+
+-- 1
+select CourseName
+from Courses
+where Subject='Economics'
+and Current = 'Yes'
+;
+
+-- 2 [add textbook title]
+select CourseName, Title
+from Courses
+inner join Textbooks
+on Courses.CourseID=Textbooks.CourseID
+where Subject='Economics'
+AND Current = 'Yes'
+;
+
+--3 [add textbook author]
+select CourseName, Title, Name
+from Courses
+inner join Textbooks
+on Courses.CourseID=Textbooks.CourseID
+left join AuthorTextbookLink
+on Textbooks.TextbookID = AuthorTextbookLink.TextbookID
+left join Author
+on Author.AuthorID = AuthorTextbookLink.AuthorID
+where Subject='Economics'
+AND Current = 'Yes'
+order by Name
+;
