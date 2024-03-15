@@ -1,0 +1,13 @@
+select count(*) from "netflix_people"
+
+select * from "netflix_people" limit 5
+
+-- do the same as the second command, but for the netflix titles
+select * from "netflix_titles_info" limit 5
+
+-- now join the two tables
+select *
+from "netflix_people" limit 5
+left join "netflix_titles_info"
+on "netflix_people.show_id" = "netflix_titles_info.show_id"
+;
